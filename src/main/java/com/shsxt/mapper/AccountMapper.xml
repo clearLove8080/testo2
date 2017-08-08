@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间 值全局唯一 com.shsxt.mapper.文件名 -->
+<mapper namespace="com.shsxt.dao.AccountDao">
+
+	<!-- 添加记录返回影响行数 -->
+	<insert id="insert" parameterType="account">
+		insert into
+		t_account(aname,type,money,user_id,remark,create_time,update_time)
+		values(#{aname},#{type},#{money},#{userId},#{remark},#{createTime},#{updateTime})
+	</insert>
+	
+	<update id="update"  parameterType="account">
+	   update t_account 
+	   set aname=#{aname},type=#{type},money=#{money},remark=#{remark},update_time=#{updateTime}
+	   where id=#{id}
+	</update>
+	
+	
+
+   <select id="queryById" parameterType="int" resultType="account">
+     select <include refid="account_sql"/>
+     from t_account where id=#{id}
+   </select>
+
+
+	<sql id="account_sql">
+		id,aname,type,money,remark,user_id as userId,create_time as createTime,update_time as updateTime
+	</sql>
+
+
+	<!-- if 标签 参数校验 -->
+	<select id="queryForPage" parameterType="accountQuery"
+		resultType="account">
+		select
+		<include refid="account_sql" />
+		from t_account
+		<where>
+			user_id=#{userId}
+			<if test="aname !=null and aname !=''">
+				and aname like concat('%',#{aname},'%')
+			</if>
+			<if test="type !=null and type !=''">
+				and type=#{type}
+			</if>
+			<if test="time!=null and time!=''">
+        <![CDATA[
+          and create_time <=#{time}
+        ]]>
+			</if>
+		</where>
+
+	</select>
+	
+	<select id="queryAccountByUserIdAndAname" resultType="account">
+	   select id,aname,type,money,remark,create_time as createTime,update_time as updateTime,user_id as userId
+	   from t_account where user_id=#{userId} and aname=#{aname}
+	</select>
+	
+	
+	<delete id="deleteBatch" >
+	    delete from t_account 
+	    where id in 
+	    <foreach collection="array" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	
+	</delete>
+	
+	
+
+
+
+
+
+
+
+
+
+
+</mapper>
+
+

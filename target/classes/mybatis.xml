@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 别名配置 -->
+	<typeAliases>
+		<!-- 配置别名包 对当前包下所有对象起别名 对象首字母小写作为别名 可以配置多个包 -->
+		<package name="com.shsxt.vo"></package>
+		<package name="com.shsxt.query"></package>
+	</typeAliases>
+
+	<plugins>
+		<!-- com.github.pagehelper为PageHelper类所在包名 -->
+		<plugin interceptor="com.github.pagehelper.PageHelper">
+			<property name="dialect" value="mysql" />
+		</plugin>
+	</plugins>
+</configuration>
